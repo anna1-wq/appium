@@ -2,7 +2,6 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import org.apache.xpath.operations.String;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +12,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.
+import org.openqa.selenium.support.*;
+
 
 import java.net.URL;
 public class Lesson_3_03_04 {
@@ -94,7 +94,11 @@ public class Lesson_3_03_04 {
 
 
 
-        waitforElementAndClick(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.LinearLayout[3]/android.widget.RelativeLayout/android.widget.TextView"),
+//        waitforElementAndClick(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.LinearLayout[3]/android.widget.RelativeLayout/android.widget.TextView"),
+//                "Cannt find option to add article to reading list",
+//                5);
+
+        waitforElementAndClick(By.xpath("//*[@text='Add to reading list']"),
                 "Cannt find option to add article to reading list",
                 5);
 
@@ -109,10 +113,13 @@ public class Lesson_3_03_04 {
         String name_folder="Learning Programming";
 
         waitforElementAndSendKeys(By.id("org.wikipedia:id/text_input"),
-                "Learning Programming",
+                name_folder,
                 "Cannot put text in articles folder input",
                 5);
-        waitforElementAndClick(By.xpath("//*[@text='Add to reading list']"),
+
+
+
+        waitforElementAndClick(By.xpath("//*[@text='OK']"),
                 "Cannot press OK button",5);
 
         waitforElementAndClick(By.xpath("*//android.widget.ImageButton[@content-desc='Navigate up']"),
@@ -121,7 +128,8 @@ public class Lesson_3_03_04 {
         waitforElementAndClick(By.xpath("*//android.widget.FrameLayout[@content-desc='My lists']"),
                 "Cannt find navigation button to my list ",5);
 
-        waitforElementAndClick(By.xpath("//*[@text='Learning Programming']"),
+
+        waitforElementAndClick(By.id("org.wikipedia:id/item_title"),
                 "Cannt find created folder ",10);
 
 
@@ -137,14 +145,22 @@ public class Lesson_3_03_04 {
 
 
 
-    private WebElement waitforElementAndClick(By by, String error_message, long timeoutInSeconds)
+
+    private WebElement waitforElementAndClick(By by, java.lang.String error_message, long timeoutInSeconds)
     {
         WebElement element = waitforElementPresent(by,error_message,timeoutInSeconds);
         element.click();
         return element;
     }
 
-    private WebElement waitforElementPresent(By by, String error_message, long timeoutInSeconds )
+    private WebElement waitforElementAndSendKeys(By by, java.lang.String value , java.lang.String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitforElementPresent(by,error_message,timeoutInSeconds);
+        element.sendKeys(value);
+        return element;
+    }
+
+    private WebElement waitforElementPresent(By by, java.lang.String error_message, long timeoutInSeconds )
     {
         WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds);
         wait.withMessage(error_message + "\n" );
@@ -152,25 +168,26 @@ public class Lesson_3_03_04 {
 
     }
 
-    private WebElement waitforElementPresent(By by, String error_message)
+    private WebElement waitforElementPresent(By by, java.lang.String error_message)
     {
         return waitforElementPresent(by , error_message,5);
     }
 
+    private WebElement waitForElementAndClear(By by, java.lang.String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitforElementPresent(by,error_message,timeoutInSeconds);
+        element.clear();
+        return element;
 
-//    private WebElement waitforElementAndSendKeys(By by, String value , String error_message, long timeoutInSeconds)
-//    {
-//        WebElement element = waitforElementPresent(by,error_message,timeoutInSeconds);
-//        element.sendKeys(value);
-//        return element;
-//    }
+    }
 
-        public WebElement waitforElementAndSendKeys(String locator, String value, String error_message, long timeoutInSeconds){
 
-            MobileElement element = (MobileElement)waitforElementPresent(locator, error_message,timeoutInSeconds);
-            element.setValue(value);
-            return element;
-        }
+//        public WebElement waitforElementAndSendKeys(By locator, String value, String error_message, long timeoutInSeconds){
+//
+//            MobileElement element = (MobileElement)waitforElementPresent(locator, error_message,timeoutInSeconds);
+//            element.setValue(value);
+//            return element;
+//        }
 
     protected void SwipeUp(int timeOfSwipe){
 
@@ -192,7 +209,7 @@ public class Lesson_3_03_04 {
 
     }
 
-    protected void SwipeUpTofindElemnt(By by, String error_message,int max_swipe){
+    protected void SwipeUpTofindElemnt(By by, java.lang.String error_message, int max_swipe){
 
         int already_swiped = 0;
         while (driver.findElements(by).size()==0){
@@ -207,15 +224,9 @@ public class Lesson_3_03_04 {
         }
     }
 
-    private WebElement waitForElementAndClear(By by, String error_message,long timeoutInSeconds)
-    {
-        WebElement element = waitforElementPresent(by,error_message,timeoutInSeconds);
-        element.clear();
-        return element;
 
-    }
 
-    protected void SwipeElementToleft(By by,String error_message){
+    protected void SwipeElementToleft(By by, java.lang.String error_message){
 
         WebElement element = waitforElementPresent(by,error_message,10);
         int left_x = element.getLocation().getX();
@@ -232,7 +243,7 @@ public class Lesson_3_03_04 {
                 .perform();
     }
 
-    private boolean waitForElementNotPresent(By by, String error_message,long timeoutInSeconds)
+    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds);
         wait.withMessage(error_message + "\n" );
